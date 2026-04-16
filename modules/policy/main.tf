@@ -77,7 +77,7 @@ resource "azurerm_policy_set_definition" "core_governance" {
 }
 
 resource "azurerm_management_group_policy_assignment" "core" {
-  name                 = "nwai-core-governance"
+  name                 = "nwai-core-gov"
   display_name         = "NWAI Core Governance"
   policy_definition_id = azurerm_policy_set_definition.core_governance.id
   management_group_id  = var.root_management_group_id
@@ -92,7 +92,7 @@ resource "azurerm_management_group_policy_assignment" "core" {
 }
 
 resource "azurerm_management_group_policy_assignment" "sandbox_vm" {
-  name                 = "nwai-sandbox-allowed-vm-skus"
+  name                 = "nwai-sbx-vm-sku"
   display_name         = "NWAI Sandbox Allowed VM SKUs"
   policy_definition_id = data.azurerm_policy_definition.allowed_vm_skus.id
   management_group_id  = var.sandbox_management_group_id
@@ -103,7 +103,7 @@ resource "azurerm_management_group_policy_assignment" "sandbox_vm" {
 }
 
 resource "azurerm_management_group_policy_assignment" "sandbox_storage" {
-  name                 = "nwai-sandbox-allowed-storage-skus"
+  name                 = "nwai-sbx-stgsku"
   display_name         = "NWAI Sandbox Allowed Storage SKUs"
   policy_definition_id = data.azurerm_policy_definition.allowed_storage_skus.id
   management_group_id  = var.sandbox_management_group_id
@@ -114,7 +114,7 @@ resource "azurerm_management_group_policy_assignment" "sandbox_storage" {
 }
 
 resource "azurerm_management_group_policy_assignment" "decommissioned_no_public_ip" {
-  name                 = "nwai-decommissioned-no-public-ip"
+  name                 = "nwai-decom-pip"
   display_name         = "NWAI Decommissioned No Public IP"
   policy_definition_id = data.azurerm_policy_definition.not_allowed_resource_types.id
   management_group_id  = var.decommissioned_management_group_id
