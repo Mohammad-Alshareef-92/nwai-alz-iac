@@ -8,8 +8,8 @@ resource "azuread_group" "global_readers" {
   security_enabled = true
 }
 
-resource "azuread_group" "security_contributors" {
-  display_name     = "${var.group_prefix}-security-contributors"
+resource "azuread_group" "identity_contributors" {
+  display_name     = "${var.group_prefix}-identity-contributors"
   security_enabled = true
 }
 
@@ -20,6 +20,16 @@ resource "azuread_group" "network_contributors" {
 
 resource "azuread_group" "management_contributors" {
   display_name     = "${var.group_prefix}-management-contributors"
+  security_enabled = true
+}
+
+resource "azuread_group" "corp_contributors" {
+  display_name     = "${var.group_prefix}-corp-contributors"
+  security_enabled = true
+}
+
+resource "azuread_group" "online_contributors" {
+  display_name     = "${var.group_prefix}-online-contributors"
   security_enabled = true
 }
 
@@ -50,22 +60,34 @@ resource "azurerm_role_assignment" "global_readers_reader" {
   principal_id         = azuread_group.global_readers.object_id
 }
 
-resource "azurerm_role_assignment" "security_contributor" {
-  scope                = "/subscriptions/${var.security_subscription_id}"
+resource "azurerm_role_assignment" "identity_contributor" {
+  scope                = var.identity_management_group_id
   role_definition_name = "Contributor"
-  principal_id         = azuread_group.security_contributors.object_id
+  principal_id         = azuread_group.identity_contributors.object_id
 }
 
 resource "azurerm_role_assignment" "network_contributor" {
-  scope                = "/subscriptions/${var.connectivity_subscription_id}"
+  scope                = var.connectivity_management_group_id
   role_definition_name = "Network Contributor"
   principal_id         = azuread_group.network_contributors.object_id
 }
 
 resource "azurerm_role_assignment" "management_contributor" {
-  scope                = "/subscriptions/${var.management_subscription_id}"
+  scope                = var.management_management_group_id
   role_definition_name = "Contributor"
   principal_id         = azuread_group.management_contributors.object_id
+}
+
+resource "azurerm_role_assignment" "corp_contributor" {
+  scope                = var.corp_management_group_id
+  role_definition_name = "Contributor"
+  principal_id         = azuread_group.corp_contributors.object_id
+}
+
+resource "azurerm_role_assignment" "online_contributor" {
+  scope                = var.online_management_group_id
+  role_definition_name = "Contributor"
+  principal_id         = azuread_group.online_contributors.object_id
 }
 
 resource "azurerm_role_assignment" "landingzone_contributor" {

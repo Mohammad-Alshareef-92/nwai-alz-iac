@@ -1,13 +1,14 @@
 module "management_groups" {
   source = "../../modules/management-groups"
 
-  security_subscription_id        = var.security_subscription_id
-  connectivity_subscription_id    = var.connectivity_subscription_id
-  management_subscription_id      = var.management_subscription_id
-  production_subscription_ids     = var.production_subscription_ids
-  stage_subscription_ids          = var.stage_subscription_ids
-  sandbox_subscription_ids        = var.sandbox_subscription_ids
+  connectivity_subscription_id    = local.connectivity_subscription_id
+  online_subscription_ids         = [local.online_subscription_id]
+  sandbox_subscription_ids        = [local.sandbox_subscription_id]
+
+  # No subscriptions for management or identity in this environment
   decommissioned_subscription_ids = var.decommissioned_subscription_ids
+  stage_subscription_ids          = var.stage_subscription_ids
+  corp_subscription_ids           = var.corp_subscription_ids
 }
 
 module "policy" {
@@ -30,11 +31,12 @@ module "rbac" {
 
   root_management_group_id          = module.management_groups.root_id
   platform_management_group_id      = module.management_groups.platform_id
+  management_management_group_id    = module.management_groups.management_id
+  connectivity_management_group_id  = module.management_groups.connectivity_id
+  identity_management_group_id      = module.management_groups.identity_id
   landing_zones_management_group_id = module.management_groups.landing_zones_id
+  corp_management_group_id          = module.management_groups.corp_id
+  online_management_group_id        = module.management_groups.online_id
   stage_management_group_id         = module.management_groups.stage_id
   sandbox_management_group_id       = module.management_groups.sandbox_id
-
-  security_subscription_id     = var.security_subscription_id
-  connectivity_subscription_id = var.connectivity_subscription_id
-  management_subscription_id   = var.management_subscription_id
 }

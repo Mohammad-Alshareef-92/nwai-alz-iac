@@ -1,8 +1,21 @@
-variable "security_subscription_id" { type = string }
 variable "connectivity_subscription_id" { type = string }
-variable "management_subscription_id" { type = string }
 
-variable "production_subscription_ids" {
+variable "security_subscription_id" {
+  type    = string
+  default = ""
+}
+
+variable "management_subscription_id" {
+  type    = string
+  default = ""
+}
+
+variable "corp_subscription_ids" {
+  type    = list(string)
+  default = []
+}
+
+variable "online_subscription_ids" {
   type    = list(string)
   default = []
 }
