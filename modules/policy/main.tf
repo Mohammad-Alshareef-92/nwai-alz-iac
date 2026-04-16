@@ -1,21 +1,9 @@
-data "azurerm_policy_definition" "allowed_locations" {
-  display_name = "Allowed locations"
-}
-
-data "azurerm_policy_definition" "require_tag" {
-  display_name = "Require a tag on resources"
-}
-
-data "azurerm_policy_definition" "allowed_vm_skus" {
-  display_name = "Allowed virtual machine size SKUs"
-}
-
-data "azurerm_policy_definition" "allowed_storage_skus" {
-  display_name = "Allowed storage account SKUs"
-}
-
-data "azurerm_policy_definition" "not_allowed_resource_types" {
-  display_name = "Not allowed resource types"
+locals {
+  policy_allowed_locations         = "/providers/Microsoft.Authorization/policyDefinitions/e56962a6-4747-49cd-b67b-bf8b01975c4c"
+  policy_require_tag               = "/providers/Microsoft.Authorization/policyDefinitions/871b6d14-10aa-478d-b590-94f262ecfa99"
+  policy_allowed_vm_skus           = "/providers/Microsoft.Authorization/policyDefinitions/cccc23c7-8427-4f53-ad12-b6a63eb452b3"
+  policy_allowed_storage_skus      = "/providers/Microsoft.Authorization/policyDefinitions/7433c107-6db4-4ad1-b57a-a76dce0154a1"
+  policy_not_allowed_resource_types = "/providers/Microsoft.Authorization/policyDefinitions/6c112d4e-5bc7-47ae-a041-ea2d9dccd749"
 }
 
 resource "azurerm_policy_set_definition" "core_governance" {
@@ -44,7 +32,7 @@ resource "azurerm_policy_set_definition" "core_governance" {
   })
 
   policy_definition_reference {
-    policy_definition_id = data.azurerm_policy_definition.allowed_locations.id
+    policy_definition_id = local.policy_allowed_locations
     reference_id         = "allowed-locations"
     parameter_values = jsonencode({
       listOfAllowedLocations = { value = "[parameters('allowedLocations')]" }
@@ -52,7 +40,7 @@ resource "azurerm_policy_set_definition" "core_governance" {
   }
 
   policy_definition_reference {
-    policy_definition_id = data.azurerm_policy_definition.require_tag.id
+    policy_definition_id = local.policy_require_tag
     reference_id         = "require-environment-tag"
     parameter_values = jsonencode({
       tagName = { value = "[parameters('tagEnvironment')]" }
@@ -60,7 +48,7 @@ resource "azurerm_policy_set_definition" "core_governance" {
   }
 
   policy_definition_reference {
-    policy_definition_id = data.azurerm_policy_definition.require_tag.id
+    policy_definition_id = local.policy_require_tag
     reference_id         = "require-owner-tag"
     parameter_values = jsonencode({
       tagName = { value = "[parameters('tagOwner')]" }
@@ -68,7 +56,7 @@ resource "azurerm_policy_set_definition" "core_governance" {
   }
 
   policy_definition_reference {
-    policy_definition_id = data.azurerm_policy_definition.require_tag.id
+    policy_definition_id = local.policy_require_tag
     reference_id         = "require-costcenter-tag"
     parameter_values = jsonencode({
       tagName = { value = "[parameters('tagCostCenter')]" }
@@ -94,7 +82,7 @@ resource "azurerm_management_group_policy_assignment" "core" {
 resource "azurerm_management_group_policy_assignment" "sandbox_vm" {
   name                 = "nwai-sbx-vm-sku"
   display_name         = "NWAI Sandbox Allowed VM SKUs"
-  policy_definition_id = data.azurerm_policy_definition.allowed_vm_skus.id
+  policy_definition_id = local.policy_allowed_vm_skus
   management_group_id  = var.sandbox_management_group_id
 
   parameters = jsonencode({
@@ -105,7 +93,7 @@ resource "azurerm_management_group_policy_assignment" "sandbox_vm" {
 resource "azurerm_management_group_policy_assignment" "sandbox_storage" {
   name                 = "nwai-sbx-stgsku"
   display_name         = "NWAI Sandbox Allowed Storage SKUs"
-  policy_definition_id = data.azurerm_policy_definition.allowed_storage_skus.id
+  policy_definition_id = local.policy_allowed_storage_skus
   management_group_id  = var.sandbox_management_group_id
 
   parameters = jsonencode({
@@ -116,7 +104,7 @@ resource "azurerm_management_group_policy_assignment" "sandbox_storage" {
 resource "azurerm_management_group_policy_assignment" "decommissioned_no_public_ip" {
   name                 = "nwai-decom-pip"
   display_name         = "NWAI Decommissioned No Public IP"
-  policy_definition_id = data.azurerm_policy_definition.not_allowed_resource_types.id
+  policy_definition_id = local.policy_not_allowed_resource_types
   management_group_id  = var.decommissioned_management_group_id
 
   parameters = jsonencode({
