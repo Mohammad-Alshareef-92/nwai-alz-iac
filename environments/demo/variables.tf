@@ -11,6 +11,11 @@ variable "corp_subscription_ids" {
   default = []
 }
 
+variable "production_subscription_ids" {
+  type    = list(string)
+  default = []
+}
+
 variable "stage_subscription_ids" {
   type    = list(string)
   default = []
@@ -23,7 +28,7 @@ variable "decommissioned_subscription_ids" {
 
 variable "allowed_locations" {
   type    = list(string)
-  default = ["uaenorth", "uaecentral"]
+  default = ["uaenorth", "uaecentral", "eastus", "westus"]
 }
 
 variable "required_tags" {
