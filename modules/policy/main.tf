@@ -6,7 +6,7 @@ locals {
   policy_not_allowed_resource_types = "/providers/Microsoft.Authorization/policyDefinitions/6c112d4e-5bc7-47ae-a041-ea2d9dccd749"
 }
 
-resource "azurerm_policy_set_definition" "core_governance" {
+resource "azurerm_management_group_policy_set_definition" "core_governance" {
   name                = "nwai-core-governance"
   policy_type         = "Custom"
   display_name        = "NWAI Core Governance"
@@ -67,7 +67,7 @@ resource "azurerm_policy_set_definition" "core_governance" {
 resource "azurerm_management_group_policy_assignment" "core" {
   name                 = "nwai-core-gov"
   display_name         = "NWAI Core Governance"
-  policy_definition_id = azurerm_policy_set_definition.core_governance.id
+  policy_definition_id = azurerm_management_group_policy_set_definition.core_governance.id
   management_group_id  = var.root_management_group_id
   location             = var.allowed_locations[0]
 
