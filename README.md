@@ -46,8 +46,8 @@ See [modules/management-groups/main.tf](modules/management-groups/main.tf).
   - `nwai-decom-pip` — deny public IPs at **decommissioned**.
 
 ### RBAC module — [modules/rbac](modules/rbac/)
-- **10 AAD security groups** (prefix configurable via `group_prefix`, default `nwai`).
-- **10 role assignments** binding each group to an MG scope (see table below).
+- **11 AAD security groups** (prefix configurable via `group_prefix`, default `nwai`).
+- **11 role assignments** binding each group to an MG scope (see table below).
 
 ## Access model
 
@@ -57,6 +57,7 @@ Role assignments at an MG **inherit down** to child MGs and their subscriptions.
 |---|---|---|---|
 | `nwai-platform-admins` | Owner | Platform | Full control of Management, Connectivity, Identity (incl. RBAC + policy) |
 | `nwai-global-readers` | Reader | Root | Read-only across the entire hierarchy |
+| `nwai-finops-readers` | Cost Management Contributor | Root | View costs and manage budgets, exports, and alerts across every MG and subscription |
 | `nwai-management-contributors` | Contributor | Management | Manage resources in management subs |
 | `nwai-network-contributors` | Network Contributor | Connectivity | Manage network resources in connectivity subs |
 | `nwai-identity-contributors` | Contributor | Identity | Manage resources in identity subs |

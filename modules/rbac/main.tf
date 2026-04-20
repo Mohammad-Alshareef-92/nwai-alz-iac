@@ -8,6 +8,11 @@ resource "azuread_group" "global_readers" {
   security_enabled = true
 }
 
+resource "azuread_group" "finops_readers" {
+  display_name     = "${var.group_prefix}-finops-readers"
+  security_enabled = true
+}
+
 resource "azuread_group" "identity_contributors" {
   display_name     = "${var.group_prefix}-identity-contributors"
   security_enabled = true
@@ -58,6 +63,12 @@ resource "azurerm_role_assignment" "global_readers_reader" {
   scope                = var.root_management_group_id
   role_definition_name = "Reader"
   principal_id         = azuread_group.global_readers.object_id
+}
+
+resource "azurerm_role_assignment" "finops_readers_cost" {
+  scope                = var.root_management_group_id
+  role_definition_name = "Cost Management Contributor"
+  principal_id         = azuread_group.finops_readers.object_id
 }
 
 resource "azurerm_role_assignment" "identity_contributor" {
