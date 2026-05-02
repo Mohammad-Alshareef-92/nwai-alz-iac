@@ -6,6 +6,21 @@ variable "bootstrap_subscription_id" {
   type = string
 }
 
+variable "online_subscription_ids" {
+  type    = list(string)
+  default = []
+}
+
+variable "connectivity_subscription_ids" {
+  type    = list(string)
+  default = []
+}
+
+variable "sandbox_subscription_ids" {
+  type    = list(string)
+  default = []
+}
+
 variable "corp_subscription_ids" {
   type    = list(string)
   default = []

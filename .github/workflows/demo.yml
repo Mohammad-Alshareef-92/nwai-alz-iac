@@ -29,8 +29,11 @@ env:
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 ## not needed for github actions, it was used in bootstrap #### 
-  TF_VAR_bootstrap_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   TF_VAR_tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+  TF_VAR_bootstrap_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  TF_VAR_online_subscription_id: ${{ secrets.ONLINE_SUBSCRIPTION_ID }}
+  TF_VAR_connectivity_subscription_id: ${{ secrets.CONNECTIVITY_SUBSCRIPTION_ID }}
+  TF_VAR_sandbox_subscription_id: ${{ secrets.SANDBOX_SUBSCRIPTION_ID }}
 
 
 jobs:
