@@ -1,9 +1,9 @@
 module "management_groups" {
   source = "../../modules/management-groups"
 
-  connectivity_subscription_id = var.connectivity_subscription_id
-  online_subscription_ids      = concat([var.online_subscription_id], var.production_subscription_ids)
-  sandbox_subscription_ids     = [var.sandbox_subscription_id]
+  connectivity_subscription_id = var.connectivity_subscription_ids[0]
+  online_subscription_ids      = concat(var.online_subscription_ids, var.production_subscription_ids)
+  sandbox_subscription_ids     = var.sandbox_subscription_ids
 
   decommissioned_subscription_ids = var.decommissioned_subscription_ids
   stage_subscription_ids          = var.stage_subscription_ids

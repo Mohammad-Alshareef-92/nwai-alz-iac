@@ -7,18 +7,30 @@ variable "bootstrap_subscription_id" {
 }
 
 variable "online_subscription_ids" {
-  type    = list(string)
-  default = []
+  type = list(string)
+
+  validation {
+    condition     = length(var.online_subscription_ids) > 0
+    error_message = "online_subscription_ids must contain at least one subscription ID."
+  }
 }
 
 variable "connectivity_subscription_ids" {
-  type    = list(string)
-  default = []
+  type = list(string)
+
+  validation {
+    condition     = length(var.connectivity_subscription_ids) == 1
+    error_message = "connectivity_subscription_ids must contain exactly one subscription ID because the management_groups module expects one connectivity subscription."
+  }
 }
 
 variable "sandbox_subscription_ids" {
-  type    = list(string)
-  default = []
+  type = list(string)
+
+  validation {
+    condition     = length(var.sandbox_subscription_ids) > 0
+    error_message = "sandbox_subscription_ids must contain at least one subscription ID."
+  }
 }
 
 variable "corp_subscription_ids" {
