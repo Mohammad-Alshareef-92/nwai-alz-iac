@@ -1,0 +1,63 @@
+name: Deploy Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "OpenTofu command"
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  TF_IN_AUTOMATION: true
+  ARM_USE_OIDC: true
+  ARM_USE_AZUREAD: true
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+jobs:
+  opentofu:
+    runs-on: ubuntu-latest
+    environment: demo
+
+    defaults:
+      run:
+        working-directory: environments/demo
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login using OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v2
+
+      - name: OpenTofu Init
+        run: tofu init -backend-config=backend.hcl
+
+      - name: OpenTofu Format Check
+        run: tofu fmt -check -recursive
+
+      - name: OpenTofu Validate
+        run: tofu validate
+
+      - name: OpenTofu Plan
+        run: tofu plan -out=tfplan
+
+      - name: OpenTofu Apply
+        if: ${{ inputs.command == 'apply' }}
+        run: tofu apply -auto-approve tfplan
