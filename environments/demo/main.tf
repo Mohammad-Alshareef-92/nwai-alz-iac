@@ -1,9 +1,9 @@
 module "management_groups" {
   source = "../../modules/management-groups"
 
-  connectivity_subscription_id    = local.connectivity_subscription_id
-  online_subscription_ids         = concat([local.online_subscription_id], var.production_subscription_ids)
-  sandbox_subscription_ids        = [local.sandbox_subscription_id]
+  connectivity_subscription_id = local.connectivity_subscription_id
+  online_subscription_ids      = concat([local.online_subscription_id], var.production_subscription_ids)
+  sandbox_subscription_ids     = [local.sandbox_subscription_id]
 
   # No subscriptions for management or identity in this environment
   decommissioned_subscription_ids = var.decommissioned_subscription_ids
