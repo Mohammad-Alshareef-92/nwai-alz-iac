@@ -25,6 +25,10 @@ env:
   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+## not needed for github actions, it was used in bootstrap #### 
+  TF_VAR_bootstrap_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+
 
 jobs:
   opentofu:
@@ -50,7 +54,7 @@ jobs:
         uses: opentofu/setup-opentofu@v2
 
       - name: OpenTofu Init
-        run: tofu init
+        run: tofu init -input=false
 
       - name: OpenTofu Format Check
         run: tofu fmt -check -recursive
@@ -59,7 +63,7 @@ jobs:
         run: tofu validate
 
       - name: OpenTofu Plan
-        run: tofu plan -out=tfplan
+        run: tofu plan -input=false -out=tfplan 
 
       - name: OpenTofu Apply
         if: ${{ inputs.command == 'apply' }}
